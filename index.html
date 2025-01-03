@@ -1,0 +1,277 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Visualize an Array</title>
+</head>
+<body>
+    <div>
+        <canvas id="myChart"></canvas>
+        <canvas id="myChart1"></canvas>
+        <script>
+            async function getData() {
+                const response = await fetch("SurfaceAirTemperature.csv");
+                const data = await response.text();
+                const rows = data.split("\n").slice(1);
+               
+                rows.forEach((elem) => {
+                    const row = elem.split(",");
+                    const year = row[0];
+                    const Landtemp = parseFloat(row[1]);
+                    const Watertemp = parseFloat(row[3]);
+
+
+                    chart.data.labels.push(year);
+                    chart.data.datasets[0].data.push(Landtemp);
+
+
+                    chart2.data.labels.push(year);
+                    chart2.data.datasets[0].data.push(Watertemp);
+
+
+
+
+                    console.log(year, Landtemp, Watertemp);
+                });
+                chart.update();
+            }
+
+
+
+
+           
+            const ctx =  document.getElementById('myChart');
+            const ctx2 =  document.getElementById('myChart1');
+            const chart2 = new Chart(ctx2, {
+                type: 'bar',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Water Surface Temperature',
+                        data: [],
+                        borderWidth: 1,
+                        backgroundColor:"aqua",
+                        borderColor:"yellow"
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: false
+                        }
+                    }
+                }
+            });  
+            const chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Land Surface Temperature',
+                        data: [],
+                        borderWidth: 1,
+                        backgroundColor:"yellow",
+                        borderColor:"aqua"
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: false
+                        }
+                    }
+                }
+            });  
+            getData();
+        </script>
+    </div>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Visualize an Array</title>
+    <style>
+        /* Styling for the body */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        /* Styling for the chart container */
+        div {
+            width: 90%;
+            max-width: 1000px;
+            margin-top: 20px;
+        }
+
+        /* Styling for each chart canvas */
+        canvas {
+            margin: 20px 0;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+
+        /* Adding a header for clarity */
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Land and Water Surface Temperature Visualization</h1>
+    <div>
+        <canvas id="myChart"></canvas>
+        <canvas id="myChart1"></canvas>
+        <script>
+            async function getData() {
+                const response = await fetch("SurfaceAirTemperature.csv");
+                const data = await response.text();
+                const rows = data.split("\n").slice(1);
+               
+                rows.forEach((elem) => {
+                    const row = elem.split(",");
+                    const year = row[0];
+                    const Landtemp = parseFloat(row[1]);
+                    const Watertemp = parseFloat(row[3]);
+
+                    chart.data.labels.push(year);
+                    chart.data.datasets[0].data.push(Landtemp);
+
+                    chart2.data.labels.push(year);
+                    chart2.data.datasets[0].data.push(Watertemp);
+
+                    console.log(year, Landtemp, Watertemp);
+                });
+                chart.update();
+                chart2.update();
+            }
+
+            // Chart 2: Water Surface Temperature (Bar Chart)
+            const ctx2 = document.getElementById('myChart1');
+            const chart2 = new Chart(ctx2, {
+                type: 'bar',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Water Surface Temperature',
+                        data: [],
+                        borderWidth: 1,
+                        backgroundColor: "rgba(0, 255, 255, 0.5)", // Aqua
+                        borderColor: "yellow",
+                        hoverBackgroundColor: "rgba(0, 255, 255, 0.7)",
+                        hoverBorderColor: "yellow",
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            title: {
+                                display: true,
+                                text: 'Temperature (°C)',
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
+                                }
+                            },
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Year',
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            backgroundColor: '#fff',
+                            bodyColor: '#000',
+                            borderColor: '#ccc',
+                            borderWidth: 1,
+                            titleColor: '#555',
+                        }
+                    }
+                }
+            });
+
+            // Chart 1: Land Surface Temperature (Bar Chart)
+            const ctx = document.getElementById('myChart');
+            const chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Land Surface Temperature',
+                        data: [],
+                        borderWidth: 1,
+                        backgroundColor: "rgba(255, 255, 0, 0.6)", // Yellow
+                        borderColor: "aqua",
+                        hoverBackgroundColor: "rgba(255, 255, 0, 0.8)",
+                        hoverBorderColor: "aqua",
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            title: {
+                                display: true,
+                                text: 'Temperature (°C)',
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
+                                }
+                            },
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Year',
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            backgroundColor: '#fff',
+                            bodyColor: '#000',
+                            borderColor: '#ccc',
+                            borderWidth: 1,
+                            titleColor: '#555',
+                        }
+                    }
+                }
+            });
+
+            getData();
+        </script>
+    </div>
+</body>
+</html>
